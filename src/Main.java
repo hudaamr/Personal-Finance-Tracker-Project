@@ -1,7 +1,13 @@
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
+    static ArrayList<Transaction> Transactions = new ArrayList<>();
+
     public static void main(String[] args) {
+
+
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -9,13 +15,12 @@ public class Main {
             System.out.println("Menu:");
             System.out.println("1. Input Transaction");
             System.out.println("2. View Transactions");
-            System.out.println("3. View Transactions (Sorted by Amount)");
-            System.out.println("4. View Summary");
-            System.out.println("5. Get Insights");
-            System.out.println("6. Exit");
+            System.out.println("3. View Summary");
+            System.out.println("4. Get Insights");
+            System.out.println("5. Exit");
             System.out.print("Choose an option: ");
             choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -25,40 +30,59 @@ public class Main {
                     viewTransactions();
                     break;
                 case 3:
-                    viewTransactionsSortedByAmount();
+//                    viewSummary();
                     break;
                 case 4:
-                    viewSummary();
+//                    getInsights();
                     break;
                 case 5:
-                    getInsights();
-                    break;
-                case 6:
                     System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 6);
-    
+
 
     }
-        public static void inputTransaction(Scanner scanner) {
+
+    public static void inputTransaction(Scanner scanner) {
+        Transaction transaction;
         System.out.print("Enter description: ");
-        descriptions[transactionCount] = scanner.nextLine();
+        String description = scanner.nextLine();
+
         System.out.print("Enter amount: ");
-        amounts[transactionCount] = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
         System.out.print("Enter category: ");
-        categories[transactionCount] = scanner.nextLine();
-        transactionCount++;
+        String category = scanner.nextLine();
+        transaction = new Transaction(description, amount, category);
+        Transactions.add(transaction);
     }
+
+    static void sortTransactionsByAmount(ArrayList<Transaction> Transactions) {
+        Transactions.sort(Comparator.comparingDouble(t -> t.amount));
+    }
+
+    static void printTransaction(ArrayList<Transaction> Transactions) {
+        System.out.printf("%-20s %-10s %-15s%n", "Description", "Amount", "Category");
+        System.out.println("------------------------------------------------------");
+        for (Transaction transaction : Transactions) {
+            System.out.printf("%-20s %-10.2f %-15s%n", transaction.description, transaction.amount, transaction.category);
+        }
+    }
+
 
     public static void viewTransactions() {
-        System.out.println(String.format("%-20s %-10s %-15s", "Description", "Amount", "Category"));
-        System.out.println("------------------------------------------------------");
-        for (int i = 0; i < transactionCount; i++) {
-            System.out.println(String.format("%-20s %-10.2f %-15s", descriptions[i], amounts[i], categories[i]));
+        printTransaction(Transactions);
+        System.out.println("Do you want to sort the transactions by amount? (Y/N)");
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+             sortTransactionsByAmount(Transactions);
+            printTransaction(Transactions);
         }
+
+
     }
 }
