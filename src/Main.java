@@ -72,14 +72,18 @@ public class Main {
         }
     }
 
-
-    public static void viewTransactions() {
-        printTransaction(Transactions);
+    static boolean askForSort() {
         System.out.println("Do you want to sort the transactions by amount? (Y/N)");
         Scanner scanner = new Scanner(System.in);
         String choice = scanner.nextLine();
-        if (choice.equalsIgnoreCase("Y")) {
-             sortTransactionsByAmount(Transactions);
+        return choice.equalsIgnoreCase("Y");
+    }
+
+
+    public static void viewTransactions() {
+        printTransaction(Transactions);
+        if (askForSort()) {
+            sortTransactionsByAmount(Transactions);
             printTransaction(Transactions);
         }
 
