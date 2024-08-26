@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -33,7 +34,7 @@ public class Main {
 //                    viewSummary();
                     break;
                 case 4:
-//                    getInsights();
+                    getInsights();
                     break;
                 case 5:
                     System.out.println("Exiting...");
@@ -45,6 +46,54 @@ public class Main {
 
 
     }
+
+    private static void getInsights() {
+            List<String> categories = new ArrayList<>();
+
+        for (Transaction transaction : Transactions) {
+                String category = transaction.category;
+
+                // if category not found in the list
+                // calc the total amount for this category
+                // then add it to the list of categories
+                if (!categories.contains(category)) {
+                    double totalForCategory = 0.0;
+
+                    for (Transaction t : Transactions) {
+                        if (t.category.equals(category)) {
+                            totalForCategory += t.amount;
+                        }
+                    }
+
+                    categories.add(category);
+
+                    double percentage = calculatePercentage(totalForCategory);
+
+                    System.out.println("------------------------------------------------------");
+                    System.out.println("Category " + category + ": $" + totalForCategory + " (" + String.format("%.2f", percentage) + "%)");
+                }
+            }
+        System.out.println("Overall amount spent across all transactions: $"+calculateTotalExpenses());
+        System.out.println("------------------------------------------------------");
+
+
+    }
+
+        public static double calculateTotalExpenses(){
+            double total = 0.0;
+            for (Transaction t : Transactions) {
+                total += t.amount;
+            }
+            return total;
+        }
+
+        public static double calculatePercentage(double amount) {
+            double totalExpenses = calculateTotalExpenses();
+            return totalExpenses == 0 ? 0 : (amount / totalExpenses) * 100;
+        }
+
+
+
 
     public static void inputTransaction(Scanner scanner) {
         Transaction transaction;
