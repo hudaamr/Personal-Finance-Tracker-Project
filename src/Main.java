@@ -3,6 +3,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class Main {
     static ArrayList<Transaction> Transactions = new ArrayList<>();
 
@@ -38,6 +40,7 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("Exiting...");
+
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -122,10 +125,13 @@ public class Main {
     }
 
     static boolean askForSort() {
-        System.out.println("Do you want to sort the transactions by amount? (Y/N)");
-        Scanner scanner = new Scanner(System.in);
-        String choice = scanner.nextLine();
-        return choice.equalsIgnoreCase("Y");
+       char choice;
+       do {
+           System.out.print("Do you want to sort transactions by amount? (Y/N): ");
+           choice = Character.toUpperCase(new Scanner(System.in).next().charAt(0));
+       } while (!Character.isLetter(choice) || (choice!='Y' && choice!= 'N'));
+
+        return choice == 'Y';
     }
 
 
