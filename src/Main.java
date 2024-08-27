@@ -3,7 +3,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
 
 public class Main {
     static ArrayList<Transaction> Transactions = new ArrayList<>();
