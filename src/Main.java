@@ -107,19 +107,43 @@ public class Main {
 
 
     public static void inputTransaction() {
-        Scanner scanner = new Scanner(System.in);
-        Transaction transaction;
-        System.out.print("Enter description: ");
-        String description = scanner.nextLine();
-        System.out.print("Enter amount: ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
-        System.out.print("Enter category: ");
-        String category = scanner.nextLine();
-        transaction = new Transaction(description, amount, category);
-        Transactions.add(transaction);
+        String description = inputDescription();
+        double amount = inputAmount();
+        String category = inputCategory();
+
+        Transaction transaction = createTransaction(description, amount, category);
+
+        addTransaction(transaction);
         checkTransactionType(transaction);
     }
+
+    private static String inputDescription() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter description: ");
+        return scanner.nextLine();
+    }
+
+    private static double inputAmount() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter amount: ");
+        return scanner.nextDouble();
+    }
+
+    private static String inputCategory() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter category: ");
+        scanner.nextLine();
+        return scanner.nextLine();
+    }
+
+    private static Transaction createTransaction(String description, double amount, String category) {
+        return new Transaction(description, amount, category);
+    }
+
+    private static void addTransaction(Transaction transaction) {
+        Transactions.add(transaction);
+    }
+
 
     static void sortTransactionsByAmount(ArrayList<Transaction> Transactions) {
         Transactions.sort(Comparator.comparingDouble(t -> t.amount));
