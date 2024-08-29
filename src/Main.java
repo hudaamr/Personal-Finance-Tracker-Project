@@ -22,11 +22,13 @@ public class Main {
     }
 
     public static int chooseOption() {
-        System.out.print("Enter your choice: ");
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-        return choice;
+        try {
+            System.out.print("Enter your choice: ");
+            Scanner scanner = new Scanner(System.in);
+            return scanner.nextInt();
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     public static void processChoice(int choice) {
