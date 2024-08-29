@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -41,7 +40,7 @@ public class Main {
             case 3 -> viewSummary();
             case 4 -> getInsights();
             case 5 -> {
-                System.out.println("Exiting...");
+                System.out.println("Exiting the program. Goodbye!");
                 exit(0);
             }
             default -> System.out.println("Invalid choice. Please try again.");
@@ -58,6 +57,7 @@ public class Main {
     }
 
     private static void getInsights() {
+        System.out.println("Spending Insights:");
         System.out.println("\nTotal Expenses: " + Math.abs(TotalExpenses));
 
         for (Transaction transaction : Transactions) {
@@ -100,6 +100,7 @@ public class Main {
     }
 
     public static void viewSummary() {
+        System.out.println("Summary:");
         System.out.println("Total Income: $" + TotalIncome);
         System.out.println("Total Expenses: $" + TotalExpenses);
         System.out.println("Balance: $" + getBalance());
@@ -119,19 +120,19 @@ public class Main {
 
     private static String inputDescription() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter description: ");
+        System.out.print("Enter transaction description: ");
         return scanner.nextLine();
     }
 
     private static double inputAmount() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter amount: ");
+        System.out.print("Enter transaction amount (positive for income, negative for expanse): ");
         return scanner.nextDouble();
     }
 
     private static String inputCategory() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter category: ");
+        System.out.print("Enter category (e.g., Food, Entertainment, Bills): ");
         scanner.nextLine();
         return scanner.nextLine();
     }
@@ -146,6 +147,8 @@ public class Main {
 
 
     static void sortTransactionsByAmount(ArrayList<Transaction> Transactions) {
+        System.out.println("Transactions sorted by amount(low to high).");
+        System.out.println("All Transactions (Sorted):");
         Transactions.sort(Comparator.comparingDouble(t -> t.amount));
     }
 
