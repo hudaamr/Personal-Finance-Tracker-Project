@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 public class Main {
     static ArrayList<Transaction> Transactions = new ArrayList<>();
+    static double TotalIncome ;
+    static double TotalExpenses ;
+
 
     public static void main(String[] args) {
 
@@ -32,7 +35,7 @@ public class Main {
                     viewTransactions();
                     break;
                 case 3:
-//                    viewSummary();
+                   viewSummary();
                     break;
                 case 4:
                     getInsights();
@@ -50,58 +53,73 @@ public class Main {
     }
 
     private static void getInsights() {
-            List<String> categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
 
         for (Transaction transaction : Transactions) {
-                String category = transaction.category;
+            String category = transaction.category;
 
-                // if category not found in the list
-                // calc the total amount for this category
-                // then add it to the list of categories
-                if (!categories.contains(category)) {
-                    double totalForCategory = 0.0;
+            // if category not found in the list
+            // calc the total amount for this category
+            // then add it to the list of categories
+            if (!categories.contains(category)) {
+                double totalForCategory = 0.0;
 
-                    for (Transaction t : Transactions) {
-                        if (t.category.equals(category)) {
-                            totalForCategory += t.amount;
-                        }
+                for (Transaction t : Transactions) {
+                    if (t.category.equals(category)) {
+                        totalForCategory += t.amount;
                     }
-
-                    categories.add(category);
-
-                    double percentage = calculatePercentage(totalForCategory);
-
-                    System.out.println("------------------------------------------------------");
-                    System.out.println("Category " + category + ": $" + totalForCategory + " (" + String.format("%.2f", percentage) + "%)");
                 }
+
+                categories.add(category);
+
+                double percentage = calculatePercentage(totalForCategory);
+
+                System.out.println("------------------------------------------------------");
+                System.out.println("Category " + category + ": $" + totalForCategory + " (" + String.format("%.2f", percentage) + "%)");
             }
-        System.out.println("Overall amount spent across all transactions: $"+calculateTotalExpenses());
+        }
+        System.out.println("Overall amount spent across all transactions: $" + calculateTotalExpenses());
         System.out.println("------------------------------------------------------");
 
 
     }
 
-        public static double calculateTotalExpenses(){
-            double total = 0.0;
-            for (Transaction t : Transactions) {
-                total += t.amount;
-            }
-            return total;
+    public static double calculateTotalExpenses() {
+        double total = 0.0;
+        for (Transaction t : Transactions) {
+            total += t.amount;
         }
+        return total;
+    }
 
-        public static double calculatePercentage(double amount) {
-            double totalExpenses = calculateTotalExpenses();
-            return totalExpenses == 0 ? 0 : (amount / totalExpenses) * 100;
+    public static double calculatePercentage(double amount) {
+        double totalExpenses = calculateTotalExpenses();
+        return totalExpenses == 0 ? 0 : (amount / totalExpenses) * 100;
+    }
+
+    public static void checkTransactionType(Transaction transaction) {
+        if (transaction.amount > 0) {
+            TotalIncome += transaction.amount;
+        } else {
+            TotalExpenses += transaction.amount;
         }
+    }
 
+    public static double getBalance(){
+        return TotalIncome + TotalExpenses;
+    }
 
+    public static void viewSummary() {
+        System.out.println("Total Income: $" + TotalIncome);
+        System.out.println("Total Expenses: $" + TotalExpenses);
+        System.out.println("Balance: $" + getBalance());
+    }
 
 
     public static void inputTransaction(Scanner scanner) {
         Transaction transaction;
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
-
         System.out.print("Enter amount: ");
         double amount = scanner.nextDouble();
         scanner.nextLine();
@@ -109,6 +127,7 @@ public class Main {
         String category = scanner.nextLine();
         transaction = new Transaction(description, amount, category);
         Transactions.add(transaction);
+        checkTransactionType(transaction);
     }
 
     static void sortTransactionsByAmount(ArrayList<Transaction> Transactions) {
@@ -124,11 +143,11 @@ public class Main {
     }
 
     static boolean askForSort() {
-       char choice;
-       do {
-           System.out.print("Do you want to sort transactions by amount? (Y/N): ");
-           choice = Character.toUpperCase(new Scanner(System.in).next().charAt(0));
-       } while (!Character.isLetter(choice) || (choice!='Y' && choice!= 'N'));
+        char choice;
+        do {
+            System.out.print("Do you want to sort transactions by amount? (Y/N): ");
+            choice = Character.toUpperCase(new Scanner(System.in).next().charAt(0));
+        } while (!Character.isLetter(choice) || (choice != 'Y' && choice != 'N'));
 
         return choice == 'Y';
     }
