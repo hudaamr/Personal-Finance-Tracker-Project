@@ -8,6 +8,8 @@ import static java.lang.System.exit;
 
 public class Main {
     static ArrayList<Transaction> Transactions = new ArrayList<>();
+    static ArrayList<String> categories = new ArrayList<>();
+
     static double TotalIncome;
     static double TotalExpenses;
 
@@ -56,38 +58,34 @@ public class Main {
     }
 
     private static void getInsights() {
-        List<String> categories = new ArrayList<>();
         System.out.println("\nTotal Expenses: " + Math.abs(TotalExpenses));
 
         for (Transaction transaction : Transactions) {
-            String category = transaction.category;
-
-            // Skip income categories and already processed categories
-            if (!categories.contains(category) && transaction.amount<0) {
-                double totalForCategory = 0.0;
-
-                for (Transaction t : Transactions) {
-                    if (t.category.equals(category)) {
-                        totalForCategory += Math.abs(t.amount);
-                    }
-                }
-
-                categories.add(category);
+            if (!categories.contains(transaction.category) && transaction.amount < 0) {
+                double totalForCategory = calculateTotalForCategory(transaction.category);
+                categories.add(transaction.category);
 
                 double percentage = calculatePercentage(totalForCategory);
 
-                System.out.println("Category " + category + " - Spent: " + totalForCategory + " (" + String.format("%.4f", percentage) + "% of total)");
+                System.out.println("Category " + transaction.category + " - Spent: " + totalForCategory + " (" + String.format("%.4f", percentage) + "% of total)");
             }
         }
         System.out.println();
     }
 
+    private static double calculateTotalForCategory(String category) {
+        double totalForCategory = 0.0;
+        for (Transaction t : Transactions) {
+            if (t.category.equals(category)) {
+                totalForCategory += Math.abs(t.amount);
+            }
+        }
+        return totalForCategory;
+    }
+
     public static double calculatePercentage(double amount) {
         return  Math.abs(TotalExpenses) == 0 ? 0 : (amount / Math.abs(TotalExpenses)) * 100;
     }
-
-
-
 
     public static void checkTransactionType(Transaction transaction) {
         if (transaction.amount > 0) {
