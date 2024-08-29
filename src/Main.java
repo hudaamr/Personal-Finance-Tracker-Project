@@ -3,54 +3,56 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 
 public class Main {
     static ArrayList<Transaction> Transactions = new ArrayList<>();
-    static double TotalIncome ;
-    static double TotalExpenses ;
+    static double TotalIncome;
+    static double TotalExpenses;
 
 
     public static void main(String[] args) {
+        openFinanceTracker();
+    }
 
-
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-
-        do {
-            System.out.println("Menu:");
-            System.out.println("1. Input Transaction");
-            System.out.println("2. View Transactions");
-            System.out.println("3. View Summary");
-            System.out.println("4. Get Insights");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    inputTransaction(scanner);
-                    break;
-                case 2:
-                    viewTransactions();
-                    break;
-                case 3:
-                   viewSummary();
-                    break;
-                case 4:
-                    getInsights();
-                    break;
-                case 5:
-                    System.out.println("Exiting...");
-
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        } while (choice != 6);
-
+    public static void showMenu() {
+        System.out.println("Menu:\n1. Input Transaction\n2. View Transactions\n3. View Summary\n4. Get Insights\n5. Exit");
 
     }
+
+    public static int chooseOption() {
+        System.out.print("Enter your choice: ");
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
+    }
+
+    public static void processChoice(int choice) {
+
+        switch (choice) {
+            case 1 -> inputTransaction();
+            case 2 -> viewTransactions();
+            case 3 -> viewSummary();
+            case 4 -> getInsights();
+            case 5 -> {
+                System.out.println("Exiting...");
+                exit(0);
+            }
+            default -> System.out.println("Invalid choice. Please try again.");
+        }
+
+    }
+
+    public static void openFinanceTracker() {
+        do {
+            showMenu();
+            int choice = chooseOption();
+            processChoice(choice);
+        } while (true);
+    }
+
 
     private static void getInsights() {
         List<String> categories = new ArrayList<>();
@@ -105,7 +107,7 @@ public class Main {
         }
     }
 
-    public static double getBalance(){
+    public static double getBalance() {
         return TotalIncome + TotalExpenses;
     }
 
@@ -116,7 +118,8 @@ public class Main {
     }
 
 
-    public static void inputTransaction(Scanner scanner) {
+    public static void inputTransaction() {
+        Scanner scanner = new Scanner(System.in);
         Transaction transaction;
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
