@@ -53,22 +53,20 @@ public class Main {
         } while (true);
     }
 
-
     private static void getInsights() {
         List<String> categories = new ArrayList<>();
+        System.out.println("\nTotal Expenses: " + Math.abs(TotalExpenses));
 
         for (Transaction transaction : Transactions) {
             String category = transaction.category;
 
-            // if category not found in the list
-            // calc the total amount for this category
-            // then add it to the list of categories
-            if (!categories.contains(category)) {
+            // Skip income categories and already processed categories
+            if (!categories.contains(category) && transaction.amount<0) {
                 double totalForCategory = 0.0;
 
                 for (Transaction t : Transactions) {
                     if (t.category.equals(category)) {
-                        totalForCategory += t.amount;
+                        totalForCategory += Math.abs(t.amount);
                     }
                 }
 
@@ -76,28 +74,18 @@ public class Main {
 
                 double percentage = calculatePercentage(totalForCategory);
 
-                System.out.println("------------------------------------------------------");
-                System.out.println("Category " + category + ": $" + totalForCategory + " (" + String.format("%.2f", percentage) + "%)");
+                System.out.println("Category " + category + " - Spent: " + totalForCategory + " (" + String.format("%.4f", percentage) + "% of total)");
             }
         }
-        System.out.println("Overall amount spent across all transactions: $" + calculateTotalExpenses());
-        System.out.println("------------------------------------------------------");
-
-
-    }
-
-    public static double calculateTotalExpenses() {
-        double total = 0.0;
-        for (Transaction t : Transactions) {
-            total += t.amount;
-        }
-        return total;
+        System.out.println();
     }
 
     public static double calculatePercentage(double amount) {
-        double totalExpenses = calculateTotalExpenses();
-        return totalExpenses == 0 ? 0 : (amount / totalExpenses) * 100;
+        return  Math.abs(TotalExpenses) == 0 ? 0 : (amount / Math.abs(TotalExpenses)) * 100;
     }
+
+
+
 
     public static void checkTransactionType(Transaction transaction) {
         if (transaction.amount > 0) {
